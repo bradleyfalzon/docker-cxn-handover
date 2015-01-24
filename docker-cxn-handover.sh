@@ -4,13 +4,6 @@ set -o nounset
 # TODO
 # checkErrors
 
-if [ $# -ne 1 ]; then
-	echo "First argument is the short hash of a running container id with exposed and published ports."
-	exit 1
-fi
-
-NEW=$1
-
 CHAIN_PREFIX="DCH_SHRT"
 
 # Return the port number that the container has exposed and published.
@@ -42,9 +35,13 @@ function check_container_status {
 
 function check_errors {
 	if [ $? -ne 0 ]; then
-		echo $@
-		exit 1
+		exit_error $@
 	fi
+}
+
+function exit_error {
+	>&2 echo $@
+	exit 1
 }
 
 # Create a random chain for this container's port forwarding.
@@ -59,6 +56,12 @@ function create_rand_chain {
 function add_nat_rules {
 	iptables -t nat -I ${CHAIN} 1 ! --in-interface docker0 -p tcp --dport ${LISTEN} -j DNAT --to-destination ${CONTAINER_IP}:${LISTEN}
 }
+
+if [ $# -ne 1 ]; then
+	exit_error "First argument is the short hash of a running container id with exposed and published ports."
+fi
+
+NEW=${1}
 
 check_container_status
 
