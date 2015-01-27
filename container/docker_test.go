@@ -12,7 +12,7 @@ import (
 func TestNewDocker(t *testing.T) {
 	c := NewDocker("Test", OSExec)
 
-	if c.id != "Test" {
+	if c.containerID != "Test" {
 		t.Error("NewDocker failed")
 	}
 }

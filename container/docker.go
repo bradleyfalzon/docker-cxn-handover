@@ -22,8 +22,8 @@ var (
 // Docker struct to implement the Container interface
 type Docker struct {
 	Container
-	id     string
-	osExec CmdRunner
+	containerID string
+	osExec      CmdRunner
 	statePaused,
 	stateRunning bool
 }
@@ -46,13 +46,13 @@ type dockerInspect struct {
 
 // NewDocker creates a new docker
 func NewDocker(containerID string, cr CmdRunner) (d *Docker) {
-	d = &Docker{id: containerID, osExec: cr}
+	d = &Docker{containerID: containerID, osExec: cr}
 	return
 }
 
 // IsValid performs basic checks of container ID to ensure ID is valid before being used
 func (d *Docker) IsValid() (err error) {
-	if d.id == "" {
+	if d.containerID == "" {
 		return errDockerIDNotSet
 	}
 	return
@@ -68,7 +68,7 @@ func (d *Docker) IsRunning() (err error) {
 
 // Inspect uses docker inspect command to fetch information about the container
 func (d *Docker) Inspect() (err error) {
-	stdout, err := d.osExec("docker", "inspect", d.id)
+	stdout, err := d.osExec("docker", "inspect", d.containerID)
 	if err != nil {
 		return
 	}
@@ -79,12 +79,12 @@ func (d *Docker) Inspect() (err error) {
 	log.Printf("json: %#v", inspect)
 
 	if len(inspect) == 0 {
-		err = fmt.Errorf("%s: %s", errDockerIDNotFound, d.id)
+		err = fmt.Errorf("%s: %s", errDockerIDNotFound, d.containerID)
 		return
 	}
 
 	if len(inspect) > 1 {
-		err = fmt.Errorf("%s: %s", errDockerIDMultipleFound, d.id)
+		err = fmt.Errorf("%s: %s", errDockerIDMultipleFound, d.containerID)
 		return
 	}
 
