@@ -77,7 +77,7 @@ func TestDockerInspect(t *testing.T) {
 	assert.Nil(t, err)
 	assert.True(t, d.stateRunning, "Container is running")
 	assert.False(t, d.statePaused, "Container is paused")
-	assert.Equal(t, d.networkIPAddress, "172.17.0.3", "Network IP is set correctly")
+	assert.Equal(t, d.ipAddress, "172.17.0.3", "Network IP is set correctly")
 
 	ipPorts := []IPPort{{PublicPort: 80, PrivatePort: 49154, Proto: "tcp"}}
 	assert.Equal(t, d.ipPorts, ipPorts, "IP Ports match correctly")

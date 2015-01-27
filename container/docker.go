@@ -26,8 +26,6 @@ type Docker struct {
 	osExec CmdRunner
 	statePaused,
 	stateRunning bool
-	networkIPAddress string
-	ipPorts          []IPPort
 }
 
 // Structs for docker inspect
@@ -92,7 +90,7 @@ func (d *Docker) Inspect() (err error) {
 
 	d.statePaused = inspect[0].State.Paused
 	d.stateRunning = inspect[0].State.Running
-	d.networkIPAddress = inspect[0].NetworkSettings.IPAddress
+	d.ipAddress = inspect[0].NetworkSettings.IPAddress
 
 	for public, private := range inspect[0].NetworkSettings.Ports {
 		var ipPort IPPort

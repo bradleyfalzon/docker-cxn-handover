@@ -13,13 +13,9 @@ var (
 
 // Container interface that other compatible container software, such
 // as Docker, LXC, Rocket should implement
-type Container interface {
-	// Make sure a container is valid
-	IsValid() error
-	// Make sure the container exists
-	Exists() error
-	// Get Container's internal IP address
-	GetInternalIP() (string, error)
+type Container struct {
+	ipAddress string
+	ipPorts   []IPPort
 }
 
 // IPPort mapping for a container's published or expose ports
