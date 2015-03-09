@@ -11,6 +11,10 @@ var (
 	errContainerCmd = "Error running external command"
 )
 
+type Reader interface {
+	IsRunning() error
+}
+
 // Container interface that other compatible container software, such
 // as Docker, LXC, Rocket should implement
 type Container struct {

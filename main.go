@@ -33,15 +33,9 @@ func main() {
 
 	c := container.NewDocker(*cid, container.OSExec)
 
-	err := c.IsValid()
-	if err != nil {
-		log.Fatalf(err.Error())
-	}
+	log.Debug("%#v", c)
 
-	err = c.IsRunning()
-	if err != nil {
-		log.Fatalf(err.Error())
-	}
+	doStuff(c)
 
 	log.Debug("debug")
 	log.Info("info")
@@ -49,5 +43,13 @@ func main() {
 	log.Warning("warning")
 	log.Error("err")
 	log.Critical("crit")
+
+}
+
+func doStuff(c container.Reader) {
+	err := c.IsRunning()
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
 
 }

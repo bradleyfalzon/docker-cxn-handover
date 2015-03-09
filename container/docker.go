@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 )
@@ -47,6 +46,8 @@ type dockerInspect struct {
 // NewDocker creates a new docker
 func NewDocker(containerID string, cr CmdRunner) (d *Docker) {
 	d = &Docker{containerID: containerID, osExec: cr}
+	d.IsValid()
+	d.Inspect()
 	return
 }
 
@@ -75,8 +76,6 @@ func (d *Docker) Inspect() (err error) {
 
 	var inspect []dockerInspect
 	err = json.Unmarshal([]byte(stdout), &inspect)
-
-	log.Printf("json: %#v", inspect)
 
 	if len(inspect) == 0 {
 		err = fmt.Errorf("%s: %s", errDockerIDNotFound, d.containerID)
